@@ -14,8 +14,8 @@ float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
 WebServer server(80);
 WebSocketsServer webSocket = WebSocketsServer(81);
 
-char* ssid = "Chez Shaw";
-char* password = "askalways";
+char* ssid = "wifi_ssid_to_connect_to";
+char* password = "wifi_password";
 
 char webpage[] PROGMEM = R"=====(
 <html>
