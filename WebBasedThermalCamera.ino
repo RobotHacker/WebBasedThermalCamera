@@ -1,11 +1,11 @@
 /*
 Started with https://github.com/acrobotic/Ai_Tips_ESP8266/tree/master/webserver_websockets
-
+Inspiration from https://www.esp32.com/viewtopic.php?t=7763
 */
 #include <WiFi.h> // Part of ESP32 board libraries
 #include <WebServer.h> // Part of ESP32 board libraries
 #include <WebSocketsServer.h> // Installed "WebSockets" library
-#include <Adafruit_AMG88xx.h>
+#include <Adafruit_AMG88xx.h> // Installed "Adafruit_AMG88xx" library
 
 Adafruit_AMG88xx amg;
 
