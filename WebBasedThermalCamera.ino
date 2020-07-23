@@ -1,6 +1,7 @@
 /*
 Started with https://github.com/acrobotic/Ai_Tips_ESP8266/tree/master/webserver_websockets
 Inspiration from https://www.esp32.com/viewtopic.php?t=7763
+
 */
 #include <WiFi.h> // Part of ESP32 board libraries
 #include <WebServer.h> // Part of ESP32 board libraries
@@ -20,8 +21,15 @@ char* password = "wifi_password";
 char webpage[] PROGMEM = R"=====(
 <html>
 <head>
+	<style>
+		#thermcam td {
+		  width: 30;
+		  height: 30;
+		}
+	</style>
 	<script>
 		var Socket;
+		var streamframestimer;
 		var sizesensor = [8,8];
 		var minTsensor = 0.0;
 		var maxTsensor = 80.0;
@@ -96,8 +104,6 @@ char webpage[] PROGMEM = R"=====(
 				for(j=0;j<sizesensor[1];j++){
 					var cell = row.insertCell(j);
 					cell.id = "tccell"+((i*8)+j);
-					cell.height = 30;
-					cell.width = 60;
 				}
 			}
 		}
@@ -134,10 +140,11 @@ char webpage[] PROGMEM = R"=====(
 		function init() {
 			// Build table
 			buildthermcamtable();
+			document.getElementById("minT").innerHTML = minT.toFixed(2) + "C";
+			document.getElementById("maxT").innerHTML = maxT.toFixed(2) + "C";
 
 			Socket = new WebSocket('ws://' + window.location.hostname + ':81/');
 			Socket.onmessage = function(event){
-				document.getElementById("rxConsole").value += event.data;
 				if ( event.data[0] == '[' ){
 					currentFrame = JSON.parse(event.data);
 					fillthermcamtable(currentFrame);
@@ -152,6 +159,15 @@ char webpage[] PROGMEM = R"=====(
 
 		function getframe(){
 			Socket.send("F");
+		}
+
+		function streamframes(){
+			streamframestimer = setTimeout( streamframes , 200 );
+			getframe();
+		}
+
+		function stopstreamframes(){
+			clearTimeout( streamframestimer );
 		}
 
 	</script>
@@ -185,14 +201,8 @@ char webpage[] PROGMEM = R"=====(
 	<hr/>
 	<div>
 		<button type="button" onclick="getframe();">Get Frame</button>
-	</div>
-	<hr/>
-	<div>
-		<textarea id="rxConsole"></textarea>
-	</div>
-	<hr/>
-	<div>
-		<input type="text" id="txBar" onkeydown="if(event.keyCode == 13) sendText();" />
+		<button type="button" onclick="streamframes();">Start Stream Frames</button>
+		<button type="button" onclick="stopstreamframes();">Stop Stream Frames</button>
 	</div>
 </body>
 </html>
