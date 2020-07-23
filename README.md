@@ -1,6 +1,12 @@
 # WebBasedThermalCamera
 Thermal Camera (AMG8833) displayed using web server and websocket on ESP32-CAM module
 
+- Here is the interface:
+  - ![Interface](WebBasedThermalCamera_interface.png)
+
+- Here is the wiring:
+  - ![Hardware](ESP32%20Cam%20AMG8833_bb.png)
+
 # TODO
 - ~Add option for continious running~
 
